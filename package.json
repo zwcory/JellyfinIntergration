@@ -1,0 +1,18 @@
+{
+  "devDependencies": {
+    "@types/node": "^25.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@jellyfin/sdk": "^0.13.0",
+    "axios": "^1.13.5",
+    "chokidar": "^5.0.0",
+    "dotenv": "^17.3.1"
+  },
+  "scripts": {
+    "dev": "ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  }
+}
