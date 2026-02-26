@@ -13,7 +13,8 @@ export async function getUsers(){
 }
 
 
-const RETRY_DELAY = 10000;
+const INITIAL_DELAY = 5000;
+const MAX_DELAY = 10 * 60 * 1000;
 const RETRYABLE_CODES = new Set([429,500,503,504]);
 const RETRYABLE_NETWORK_CODES = new Set([
     "ETIMEDOUT",
@@ -25,15 +26,16 @@ const RETRYABLE_NETWORK_CODES = new Set([
 
 let connectionTimeout: ReturnType<typeof setTimeout> | null = null;
 
-function scheduleRetry(resolve: (val: boolean) => void) {
-    console.log(`Retrying in ${RETRY_DELAY / 1000}s ...`);
+function scheduleRetry(resolve: (val: boolean) => void, delay: number) {
+    const nextDelay = Math.min(delay * 2, MAX_DELAY);
+    console.log(`Retrying in ${delay / 1000}s...`);
     connectionTimeout = setTimeout(async () => {
         connectionTimeout = null;
-        resolve(await testConnection());
-    }, RETRY_DELAY)
+        resolve(await testConnection(nextDelay));
+    }, delay)
 }
 
-export async function testConnection(): Promise<boolean>{
+export async function testConnection(delay:number = INITIAL_DELAY): Promise<boolean>{
     if (connectionTimeout){
         clearTimeout(connectionTimeout);
         connectionTimeout = null;
@@ -93,7 +95,7 @@ export async function testConnection(): Promise<boolean>{
         }
 
         if (shouldRetry) {
-            return new Promise((resolve) => scheduleRetry(resolve));
+            return new Promise((resolve) => scheduleRetry(resolve, delay));
         }
 
         console.log("Non-retryable error. Giving up.");
