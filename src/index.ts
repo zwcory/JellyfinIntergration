@@ -36,7 +36,7 @@ async function triggerLibraryScan() {
         }
     );
 
-    console.log("🔄 Library scan triggered");
+    console.log("Library scan triggered");
 }
 
 // Simple debounce to avoid spamming scans when many files arrive at once
@@ -54,7 +54,7 @@ function debouncedScan(delayMs = 30000) {
         scanTimeout = null;
     }, delayMs);
 
-    console.log(`⏳ Library scan scheduled in ${delayMs / 1000}s`);
+    console.log(`Library scan scheduled in ${delayMs / 1000}s`);
 }
 
 async function main() {

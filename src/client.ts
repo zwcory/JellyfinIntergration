@@ -6,6 +6,7 @@ import {AuthenticateUserByName, UserApiAuthenticateUserByNameRequest} from "@jel
 let api: Api | null = null;
 let userId: string | null = null;
 
+
 const jellyfin = new Jellyfin({
     clientInfo: {
         name: "Jellyfin Integration Layer",
