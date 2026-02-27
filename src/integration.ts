@@ -60,16 +60,16 @@ async function main() {
                 `Playback Started: ${payload.Item?.Name} (${payload.Item?.Type})`
             );
         },
-        onItemRemoved: (payload) => {
+        onItemDeleted: (payload) => {
             console.log(
                 `Item removed: ${payload.Item?.Name} (${payload.Item?.Type})`
             );
         },
-        onUserLogin: (payload) => {
-            console.log(
-                `User Logged In: ${payload.Item?.Name} (${payload.Item?.Type})`
-            );
-        },
+        // onUserLogin: (payload) => {
+        //     console.log(
+        //         `User Logged In: ${payload.Item?.Name} (${payload.Item?.Type})`
+        //     );
+        // },
     });
 
     // Step 3: Periodically check connection is still alive

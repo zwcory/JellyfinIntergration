@@ -7,8 +7,7 @@ export async function getUsers(){
     const api = await getApi();
 
 
-    const { data } = await getUserApi(api).getPublicUsers();
-
+    const { data } = await getUserApi(api).getUsers();
     return data ?? [];
 }
 

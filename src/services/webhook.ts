@@ -13,9 +13,9 @@ interface WebhookPayload {
 
 interface WebhookCallbacks {
     onItemAdded?: (payload: WebhookPayload) => void | Promise<void>;
-    onItemRemoved?: (payload: WebhookPayload) => void | Promise<void>;
+    onItemDeleted?: (payload: WebhookPayload) => void | Promise<void>;
     onPlaybackStart?: (payload: WebhookPayload) => void | Promise<void>;
-    onUserLogin?: (payload: WebhookPayload) => void | Promise<void>;
+    // onUserLogin?: (payload: WebhookPayload) => void | Promise<void>;
 }
 
 
@@ -24,32 +24,39 @@ export function startWebhookServer(
     callbacks: WebhookCallbacks
 ) {
     const app = express();
-    app.use(express.json());
+    app.use(express.json({ type: "*/*" }));
 
-    app.post("/webhook", (req, res) => {
-        const payload: WebhookPayload = req.body;
-        console.log(`Webhook received: ${payload.Event}`);
+    try {
 
-        switch (payload.Event) {
-            case "ItemAdded":
-                void callbacks.onItemAdded?.(payload);
-                break;
-            case "ItemRemoved":
-                void callbacks.onItemRemoved?.(payload);
-                break;
-            case "PlaybackStart":
-                void callbacks.onPlaybackStart?.(payload);
-                break;
-            default:
-                console.log(`Unhandled event: ${payload.Event}`);
-        }
 
-        res.sendStatus(200);
-    });
+        app.post("/webhook", (req, res) => {
+            const payload: WebhookPayload = req.body;
+            console.log(`Event is: ${payload.Event}`);
 
-    app.listen(port, () => {
-        console.log(`Webhook server listening on port ${port}`);
-    });
+            switch (payload.Event) {
+                case "ItemAdded":
+                    void callbacks.onItemAdded?.(payload);
+                    break;
+                case "ItemDeleted":
+                    void callbacks.onItemDeleted?.(payload);
+                    break;
+                case "PlaybackStart":
+                    void callbacks.onPlaybackStart?.(payload);
+                    break;
+                default:
+                    console.log(`Unhandled event: ${payload.Event}`);
+            }
+
+            res.sendStatus(200);
+        });
+
+        app.listen(port, () => {
+            console.log(`Webhook server listening on port ${port}`);
+        });
+
+    } catch (e) {
+        console.error(e)
+    }
 
     return app;
 }
