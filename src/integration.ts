@@ -43,7 +43,7 @@ async function main() {
     console.log("Connected to Jellyfin!");
 
     // Step 2: Start webhook server
-    startWebhookServer(3000, {
+    const {app, server} = startWebhookServer(3000, {
         onItemAdded: async (payload) => {
             console.log(
                 `New Item: ${payload.Item?.Name} (${payload.Item?.Type})`

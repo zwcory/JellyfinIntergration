@@ -31,7 +31,6 @@ export async function searchLibrary(query: string, limit = 10) {
         recursive: true,
         limit,
     })
-
     return data.Items ?? [];
 }
 
